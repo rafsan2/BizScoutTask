@@ -21,20 +21,27 @@ jobs:
         with:
           node-version: '20'
 
-      # 3. Install dependencies
+      # 3. Install dependencies including Cypress
       - name: Install Dependencies
         run: npm install
 
-      # 4. Run Cypress tests with Mochawesome reporter
+      # 4. Run Cypress Tests using Cypress GitHub Action
       - name: Run Cypress Tests
-        run: |
-          npx cypress run --reporter mochawesome --reporter-options reportDir=cypress/reports,overwrite=false,html=false,json=true
+        uses: cypress-io/github-action@v5
+        with:
+          browser: chrome
+          reporter: mochawesome
+          reporter-options: reportDir=cypress/reports,overwrite=false,html=false,json=true
 
-      # 5. Generate HTML report from JSON
+      # 5. Generate HTML report from JSON (safe if no JSON exists)
       - name: Generate HTML Report
         run: |
-          npx mochawesome-merge cypress/reports/*.json > cypress/reports/report.json
-          npx mochawesome-report-generator cypress/reports/report.json -o cypress/reports/html
+          if ls cypress/reports/*.json 1> /dev/null 2>&1; then
+            npx mochawesome-merge cypress/reports/*.json > cypress/reports/report.json
+            npx mochawesome-report-generator cypress/reports/report.json -o cypress/reports/html
+          else
+            echo "No JSON reports found"
+          fi
 
       # 6. Upload screenshots, videos, and HTML report as artifacts
       - name: Upload Test Artifacts
