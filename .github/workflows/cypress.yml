@@ -1,4 +1,4 @@
-name: Cypress Tests
+name: Cypress CI/CD
 
 on:
   push:
@@ -7,31 +7,37 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  cypress-tests:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      # 1. Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
+      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      # 3. Install dependencies
+      - name: Install Dependencies
         run: npm install
 
-      - name: Run Cypress tests with Mochawesome
+      # 4. Run Cypress tests with Mochawesome reporter
+      - name: Run Cypress Tests
         run: |
           npx cypress run --reporter mochawesome --reporter-options reportDir=cypress/reports,overwrite=false,html=false,json=true
 
-      - name: Generate HTML report
+      # 5. Generate HTML report from JSON
+      - name: Generate HTML Report
         run: |
           npx mochawesome-merge cypress/reports/*.json > cypress/reports/report.json
           npx mochawesome-report-generator cypress/reports/report.json -o cypress/reports/html
 
-      - name: Upload test artifacts
+      # 6. Upload screenshots, videos, and HTML report as artifacts
+      - name: Upload Test Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: cypress-artifacts
