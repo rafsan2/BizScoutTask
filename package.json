@@ -10,10 +10,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "cypress": "^15.2.0",
     "typescript": "^5.9.2"
   },
   "devDependencies": {
-    "cypress-xpath": "^2.0.1"
+    "cypress": "^15.2.0",
+    "cypress-xpath": "^2.0.1",
+    "mochawesome": "^7.1.4",
+    "mochawesome-merge": "^5.0.0",
+    "mochawesome-report-generator": "^6.3.0"
   }
 }
