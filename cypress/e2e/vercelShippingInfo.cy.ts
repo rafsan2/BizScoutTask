@@ -13,7 +13,7 @@ describe('Vercel Shipping Test', () => {
 
     })
 
-    it.only('Verify validation messages are displayed when no required fields are filled & "Continue to shipping"  button is clicked', () => {
+    it('Verify validation messages are displayed when no required fields are filled & "Continue to shipping"  button is clicked', () => {
 
         vercelCheckoutPage.navigateToVercelCheckout()
         vercelCheckoutPage.maximizeTheWindow()

@@ -13,23 +13,25 @@ jobs:
     steps:
       # 1. Checkout repository
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # 2. Setup Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       # 3. Install dependencies including Cypress
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       # 4. Run Cypress Tests using Cypress GitHub Action
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v5
         with:
           browser: chrome
+          headed: true # run headed Chrome (not tiny headless Electron)
+          config: viewportWidth=1280,viewportHeight=800,defaultCommandTimeout=10000
           reporter: mochawesome
           reporter-options: reportDir=cypress/reports,overwrite=false,html=false,json=true
 
